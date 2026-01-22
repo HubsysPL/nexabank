@@ -92,7 +92,7 @@ Pull Requesty:
 ## 📺 Live Coding
 
 Projekt rozwijany publicznie na YouTube:
-👉 [https://www.youtube.com/@Skowronkowy_dev]
+👉 https://www.youtube.com/@Skowronkowy_dev
 
 ---
 
