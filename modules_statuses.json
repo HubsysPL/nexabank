@@ -1,4 +1,7 @@
 {
     "Core": true,
-    "Accounts": true
+    "Accounts": true,
+    "Ledger": true,
+    "Transfers": true,
+    "Clearing": true
 }

@@ -1,0 +1,11 @@
+{
+    "name": "Transfers",
+    "alias": "transfers",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Transfers\\Providers\\TransfersServiceProvider"
+    ],
+    "files": []
+}

@@ -7,6 +7,7 @@ use App\Concerns\ProfileValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Modules\Core\Services\ClientNumberGenerator;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -25,6 +26,7 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return User::create([
+            'customer_id' => ClientNumberGenerator::generate(),
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],

@@ -3,41 +3,28 @@
 namespace Modules\Accounts\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\Core\ValueObjects\Money;
 use Modules\Core\Enums\AccountStatus;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Account extends Model
 {
     protected $fillable = [
         'user_id',
         'status',
-        'balance', // w hubitach
     ];
 
     protected $casts = [
         'status' => AccountStatus::class,
     ];
 
-    protected $attributes = [
-        'balance' => 0,
-    ];
-
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function deposit(Money $amount)
+    public function isActive(): bool
     {
-        $this->balance = (new Money($this->balance))->add($amount)->getAmount();
-        $this->save();
+        return $this->status === AccountStatus::ACTIVE;
     }
-
-    public function withdraw(Money $amount)
-    {
-        $this->balance = (new Money($this->balance))->subtract($amount)->getAmount();
-        $this->save();
-    }
-
 }
