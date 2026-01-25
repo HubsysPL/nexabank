@@ -2,18 +2,16 @@
 
 namespace Modules\Core\Services;
 
-use App\Models\User;
+use App\Models\User; // Assuming App\Models\User
+use Illuminate\Support\Str;
 
 class ClientNumberGenerator
 {
-    /**
-     * Generates a unique, 8-digit numeric Customer ID.
-     */
-    public static function generate(): int
+    public static function generate(): string
     {
         do {
-            $number = random_int(10000000, 99999999);
-        } while (User::where('customer_id', '==',$number)->exists());
+            $number = (string) random_int(10000000, 99999999); // 8-digit customer_id
+        } while (User::where('customer_id', $number)->exists());
 
         return $number;
     }

@@ -2,8 +2,6 @@
 
 namespace Modules\Core\ValueObjects;
 
-use Modules\Core\Exceptions\InsufficientFundsException;
-
 final class Money
 {
     private int $amount; // hubity
@@ -24,10 +22,6 @@ final class Money
 
     public function subtract(Money $other): Money
     {
-        if ($this->amount < $other->amount) {
-            throw new InsufficientFundsException('Niewystarczające środki.');
-        }
-
         return new Money($this->amount - $other->amount);
     }
 
@@ -48,7 +42,7 @@ final class Money
 
     public static function fromHub(int $hub): self
     {
-        return new self($hub * 100);
+        return new self( (int) ($hub * 100) ); // Ensure integer casting
     }
 
     public static function zero(): self

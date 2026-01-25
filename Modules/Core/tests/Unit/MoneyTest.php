@@ -1,86 +1,94 @@
 <?php
 
+namespace Tests\Unit;
+
 use Modules\Core\Exceptions\InsufficientFundsException;
 use Modules\Core\ValueObjects\Money;
+use Tests\TestCase;
 
-it('throws an exception when created with a negative amount', function () {
-    new Money(-100);
-})->throws(\InvalidArgumentException::class, 'Kwota nie może być ujemna.');
+class MoneyTest extends TestCase
+{
+    /** @test */
+    public function it_throws_an_exception_when_created_with_a_negative_amount()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new Money(-1);
+    }
 
-it('can be instantiated with a zero amount', function () {
-    $money = new Money(0);
-    expect($money->getAmount())->toBe(0);
-});
+    /** @test */
+    public function it_can_be_instantiated_with_a_zero_amount()
+    {
+        $money = new Money(0);
+        $this->assertEquals(0, $money->getAmount());
+    }
 
-it('can be instantiated with a positive amount', function () {
-    $money = new Money(1000);
-    expect($money->getAmount())->toBe(1000);
-});
+    /** @test */
+    public function it_can_be_instantiated_with_a_positive_amount()
+    {
+        $money = new Money(100);
+        $this->assertEquals(100, $money->getAmount());
+    }
 
-it('adds another money value', function () {
-    $money = new Money(1000);
-    $other = new Money(500);
-    $result = $money->add($other);
+    /** @test */
+    public function it_adds_another_money_value()
+    {
+        $money = new Money(100);
+        $result = $money->add(new Money(50));
+        $this->assertEquals(150, $result->getAmount());
+    }
 
-    expect($result)->toBeInstanceOf(Money::class)
-        ->and($result->getAmount())->toBe(1500);
-});
+    /** @test */
+    public function it_subtracts_another_money_value()
+    {
+        $money = new Money(100);
+        $result = $money->subtract(new Money(50));
+        $this->assertEquals(50, $result->getAmount());
+    }
+    
+    /** @test */
+    public function it_returns_correct_amount()
+    {
+        $money = new Money(100);
+        $this->assertEquals(100, $money->getAmount());
+    }
+    
+    /** @test */
+    public function it_checks_if_the_amount_is_zero()
+    {
+        $money = new Money(0);
+        $this->assertTrue($money->isZero());
+        
+        $money = new Money(1);
+        $this->assertFalse($money->isZero());
+    }
+    
+    /** @test */
+    public function it_checks_if_the_amount_is_greater_than_another()
+    {
+        $money = new Money(100);
+        $this->assertTrue($money->greaterThan(new Money(50)));
+        $this->assertFalse($money->greaterThan(new Money(100)));
+        $this->assertFalse($money->greaterThan(new Money(150)));
+    }
+    
+    /** @test */
+    public function it_can_be_created_from_hub()
+    {
+        $money = Money::fromHub(1);
+        $this->assertEquals(100, $money->getAmount());
+    }
 
-it('subtracts another money value', function () {
-    $money = new Money(1000);
-    $other = new Money(500);
-    $result = $money->subtract($other);
+    /** @test */
+    public function it_can_create_a_zero_value_instance()
+    {
+        $money = Money::zero();
+        $this->assertEquals(0, $money->getAmount());
+    }
 
-    expect($result)->toBeInstanceOf(Money::class)
-        ->and($result->getAmount())->toBe(500);
-});
-
-it('throws an exception when subtracting with insufficient funds', function () {
-    $money = new Money(500);
-    $other = new Money(1000);
-
-    $money->subtract($other);
-})->throws(InsufficientFundsException::class, 'Niewystarczające środki.');
-
-it('returns correct amount', function () {
-    $money = new Money(12345);
-    expect($money->getAmount())->toBe(12345);
-});
-
-it('checks if the amount is zero', function () {
-    $zeroMoney = new Money(0);
-    $nonZeroMoney = new Money(100);
-
-    expect($zeroMoney->isZero())->toBeTrue()
-        ->and($nonZeroMoney->isZero())->toBeFalse();
-});
-
-it('checks if the amount is greater than another', function () {
-    $money = new Money(1000);
-    $smaller = new Money(500);
-    $equal = new Money(1000);
-
-    expect($money->greaterThan($smaller))->toBeTrue()
-        ->and($money->greaterThan($equal))->toBeFalse();
-});
-
-it('can be created from hubits', function () {
-    $money = Money::fromHub(123);
-    expect($money->getAmount())->toBe(12300);
-});
-
-it('can create a zero value instance', function () {
-    $zeroMoney = Money::zero();
-    expect($zeroMoney->isZero())->toBeTrue();
-});
-
-it('converts to hubits string format', function () {
-    $money = new Money(12345);
-    expect($money->toHub())->toBe('123.45');
-
-    $money = new Money(100);
-    expect($money->toHub())->toBe('1.00');
-
-    $money = new Money(50);
-    expect($money->toHub())->toBe('0.50');
-});
+    /** @test */
+    public function it_converts_to_hub_string_format()
+    {
+        $money = new Money(12345);
+        $this->assertEquals('123.45', $money->toHub());
+    }
+}

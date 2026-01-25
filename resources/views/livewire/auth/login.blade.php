@@ -10,7 +10,7 @@
 
             <!-- Email Address -->
             <flux:input
-                name="email"
+                name="customer_id"
                 :label="__('Customer ID')"
                 type="text"
                 required
