@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'hubsys' => [
+        'client_id' => env('HUBSYS_CLIENT_ID'),
+        'client_secret' => env('HUBSYS_CLIENT_SECRET'),
+        'redirect_uri' => env('HUBSYS_REDIRECT_URI'),
+        'authorization_url' => env('HUBSYS_AUTHORIZATION_URL'),
+        'token_url' => env('HUBSYS_TOKEN_URL'),
+        'user_data_url' => env('HUBSYS_USER_DATA_URL'),
+    ],
+
 ];

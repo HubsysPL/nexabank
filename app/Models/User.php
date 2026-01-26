@@ -23,7 +23,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'customer_id'
+        'customer_id',
+        'hid',
+        'wdo_verified_at',
+        'wdo_oauth_state',
+        'agreement_id',
+        'agreement_signed_at',
+        'onboarding_status',
     ];
 
     /**
