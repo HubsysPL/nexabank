@@ -24,12 +24,19 @@ class AgreementService
             throw new \Exception("Szablon umowy '{$templateName}' nie istnieje.");
         }
 
+        // Pobierz pełny obiekt AccountProduct
+        $selectedProduct = \Modules\Accounts\Models\AccountProduct::where('code', $selectedProductCode)->first();
+
+        if (!$selectedProduct) {
+            throw new \Exception("Produkt o kodzie '{$selectedProductCode}' nie istnieje.");
+        }
+
         // Przygotuj dane dla szablonu umowy
         $data = array_merge($userData, [
             'user' => $user,
             'agreement_date' => now()->format('Y-m-d H:i:s'),
             'hubsys_clause' => 'Niniejsza umowa jest ważna wyłącznie w ekosystemie Hubsys i nie stanowi zobowiązania wobec prawdziwego banku komercyjnego.',
-            'selectedProductCode' => $selectedProductCode, // Dodano kod produktu
+            'selectedProduct' => $selectedProduct, // Przekazano pełny obiekt produktu
         ]);
 
         $agreementContent = View::make($templateName, $data)->render();

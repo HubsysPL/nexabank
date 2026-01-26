@@ -31,7 +31,7 @@
         <p class="section">§ 1. Przedmiot Umowy</p>
         <p>1. Przedmiotem niniejszej Umowy jest otwarcie i prowadzenie rachunku bankowego dla Klienta w Nexa Bank (dalej "Rachunek").</p>
         <p>2. Rachunek będzie prowadzony w walucie <span class="highlight">PLN</span>.</p>
-        <p>3. Kod wybranego produktu: <span class="highlight">{{ $user->accountProducts->firstWhere('code', $selectedProductCode)->name ?? 'Brak danych' }}</span>.</p>
+        <p>3. Kod wybranego produktu: <span class="highlight">{{ $selectedProduct->name ?? 'Brak danych' }}</span>.</p>
 
         <p class="section">§ 2. Dane Klienta</p>
         <p>Dane Klienta w dniu zawarcia Umowy:</p>

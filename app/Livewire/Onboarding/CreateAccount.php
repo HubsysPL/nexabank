@@ -14,6 +14,8 @@ class CreateAccount extends Component
 
     public $accountProducts;
     public $selectedProductCode;
+    public ?AccountProduct $selectedProduct = null;
+    public ?string $promotionCode = null;
     public $accountCreated = false;
     public $errorMessage;
     public $successMessage;
@@ -46,8 +48,22 @@ class CreateAccount extends Component
 
     public function mount()
     {
-        $this->accountProducts = AccountProduct::all();
-        $this->selectedProductCode = $this->accountProducts->first()->code ?? null;
+        $this->promotionCode = request()->query('promo_code');
+
+        if ($this->promotionCode) {
+            $this->selectedProduct = AccountProduct::where('code', $this->promotionCode)->first();
+            if($this->selectedProduct) {
+                $this->selectedProductCode = $this->selectedProduct->code;
+            }
+        }
+
+        if (!$this->selectedProduct) {
+            $this->accountProducts = AccountProduct::all();
+            if ($this->accountProducts->isNotEmpty()) {
+                $this->selectedProductCode = $this->accountProducts->first()->code;
+            }
+        }
+
 
         if (session('onboarding_user_id')) {
             $this->onboardingUser = User::find(session('onboarding_user_id'));
@@ -181,7 +197,7 @@ class CreateAccount extends Component
         }
 
         try {
-            $agreement = $this->onboardingService->generateBankAccountAgreement($this->onboardingUser);
+            $agreement = $this->onboardingService->generateBankAccountAgreement($this->onboardingUser, $this->selectedProductCode);
             $this->agreementContent = $agreement->content;
             $this->onboardingStatus = $this->onboardingUser->onboarding_status; 
             $this->updateCurrentStepFromStatus();
