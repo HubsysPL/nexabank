@@ -25,6 +25,7 @@ class AccountService
             $accountNumber = $this->generateUniqueAccountNumber();
 
             $account = new Account([
+                'id' => Str::uuid(),
                 'user_id' => $user->id,
                 'account_product_id' => $product->id,
                 'account_number' => $accountNumber,
