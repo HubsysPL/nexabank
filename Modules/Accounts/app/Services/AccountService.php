@@ -4,11 +4,11 @@ namespace Modules\Accounts\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str; // Dodano
 use Modules\Accounts\Models\Account;
 use Modules\Accounts\Models\AccountProduct;
 use Modules\Core\Services\HrbService;
 use Modules\Core\Enums\AccountStatus;
+use Str;
 
 class AccountService
 {
@@ -26,9 +26,9 @@ class AccountService
             $hrb = HrbService::generate($bankCode, $institutionCode, $accountSequence);
 
             $account = Account::create([
-                'id' => Str::uuid(), // Dodano generowanie UUID
+                'id' => Str::uuid()->toString(),
                 'user_id' => $user->id,
-                'account_product_code' => $product->code,
+                'product_code' => $product->code,
                 'hrb' => $hrb,
                 'bank_code' => $bankCode,
                 'institution_code' => $institutionCode,

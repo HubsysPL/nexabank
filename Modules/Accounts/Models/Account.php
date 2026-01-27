@@ -2,50 +2,43 @@
 
 namespace Modules\Accounts\Models;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str; // Import Str facade
 
 class Account extends Model
 {
-    use HasFactory;
+    use HasUuids, HasFactory;
 
-    // Disable auto-incrementing for UUIDs
+    protected $keyType = 'string';
     public $incrementing = false;
 
-    // Set key type to string for UUIDs
-    protected $keyType = 'string';
-
-    protected $fillable = [
-        'id',
-        'user_id',
-        'account_product_id',
-        'account_number',
-        'balance',
-        'currency',
-        'status',
+    protected $casts = [
+        'id' => 'string',
+        'user_id' => 'string',
+        'status' => AccountStatus::class,
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            // Generate a UUID for the 'id' if it's not already set
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
+    protected $fillable = [
+        'user_id',
+        'product_code',
+        'hrb',
+        'bank_code',
+        'institution_code',
+        'account_sequence',
+        'status',
+        'balance',
+    ];
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(AccountProduct::class, 'account_product_id');
+        return $this->belongsTo(AccountProduct::class, 'product_code', 'code');
     }
 }

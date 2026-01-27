@@ -46,7 +46,7 @@ class OnboardingService
         return DB::transaction(function () use ($userData, $productCode) {
             // Walidacja danych użytkownika
             // Ta walidacja jest już w CreateNewUsers, ale można tu dodać dodatkowe.
-            
+
             $user = $this->createsNewUsers->create($userData);
 
             // Sprawdź, czy produkt istnieje
@@ -164,6 +164,7 @@ class OnboardingService
             }
 
             $product = AccountProduct::where('code', $productCode)->firstOrFail();
+
             $this->accountService->createAccount($user, $product);
 
             $user->onboarding_status = 'completed';
